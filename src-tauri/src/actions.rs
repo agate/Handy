@@ -89,6 +89,18 @@ fn strip_think_block(s: &str) -> &str {
     s
 }
 
+/// Drop the trailing spaces models leave at line ends (a Markdown line-break
+/// habit no prompt reliably stops) and blank lines around the text, since
+/// they would be pasted verbatim.
+fn tidy_post_processed_text(text: &str) -> String {
+    text.lines()
+        .map(str::trim_end)
+        .collect::<Vec<_>>()
+        .join("\n")
+        .trim()
+        .to_string()
+}
+
 /// Build a system prompt from the user's prompt template.
 /// Removes `${output}` placeholder since the transcription is sent as the user message.
 fn build_system_prompt(prompt_template: &str) -> String {
@@ -368,6 +380,7 @@ pub(crate) async fn process_transcription_output(
         if let Some(processed_text) =
             post_process_transcription(&settings, profile, &final_text).await
         {
+            let processed_text = tidy_post_processed_text(&processed_text);
             post_processed_text = Some(processed_text.clone());
             final_text = processed_text;
             post_process_prompt = Some(profile.prompt.clone());
@@ -905,7 +918,7 @@ pub fn action_for_binding(binding_id: &str) -> Option<Arc<dyn ShortcutAction>> {
 mod tests {
     use super::{
         complete_unless_cancelled, is_blank_transcription, should_use_streaming_overlay,
-        strip_think_block,
+        strip_think_block, tidy_post_processed_text,
     };
     use crate::settings::OverlayStyle;
     use std::future;
@@ -913,6 +926,21 @@ mod tests {
     use std::sync::Arc;
     use std::thread;
     use std::time::Duration;
+
+    #[test]
+    fn post_processed_text_loses_trailing_spaces_but_keeps_its_lines() {
+        let reply = "\n这周有两件事：  \n1. 发版  \n2. 写周报 \t\n\n";
+        assert_eq!(
+            tidy_post_processed_text(reply),
+            "这周有两件事：\n1. 发版\n2. 写周报"
+        );
+    }
+
+    #[test]
+    fn post_processed_text_keeps_inner_spacing_and_blank_lines() {
+        let reply = "Intro  line\n\n  indented item";
+        assert_eq!(tidy_post_processed_text(reply), reply.trim());
+    }
 
     #[test]
     fn blank_transcription_is_detected() {
