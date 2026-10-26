@@ -176,8 +176,10 @@
         "errors": {
           "restore": "Orijinal kısayol geri yüklenemedi",
           "set": "Kısayol ayarlanamadı: {{error}}",
-          "reset": "Kısayol orijinal değerine sıfırlanamadı"
-        }
+          "reset": "Kısayol orijinal değerine sıfırlanamadı",
+          "conflict": "{{shortcut}} zaten “{{name}}” tarafından kullanılıyor. Başka bir kısayol seçin."
+        },
+        "notSet": "Ayarlanmadı"
       },
       "language": {
         "title": "Dil",
@@ -382,9 +384,6 @@
       }
     },
     "postProcessing": {
-      "hotkey": {
-        "title": "Kısayol Tuşu"
-      },
       "api": {
         "title": "API",
         "provider": {
@@ -424,24 +423,37 @@
       },
       "prompts": {
         "title": "Prompt",
-        "selectedPrompt": {
-          "title": "Seçili Prompt",
-          "description": "Transkripsiyonları iyileştirmek için bir şablon seçin veya yeni bir tane oluşturun. Yakalanan transkripte referans vermek için prompt metni içinde ${output} kullanın."
-        },
-        "noPrompts": "Kullanılabilir prompt yok",
-        "selectPrompt": "Prompt Seç",
-        "createNew": "Yeni Prompt Oluştur",
-        "promptLabel": "Prompt Etiketi",
-        "promptLabelPlaceholder": "Prompt adı girin",
         "promptInstructions": "Prompt Talimatları",
         "promptInstructionsPlaceholder": "Transkripsiyondan sonra çalıştırılacak talimatları yazın. Örnek: Aşağıdaki metnin dilbilgisini ve açıklığını iyileştir: ${output}",
         "promptTip": "İpucu: Transkribe edilen metni promptunuza eklemek için <code>${output}</code> kullanın.",
-        "updatePrompt": "Promptu Güncelle",
-        "deletePrompt": "Promptu Sil",
-        "createPrompt": "Prompt Oluştur",
-        "cancel": "İptal",
-        "selectToEdit": "Ayrıntılarını görüntülemek ve düzenlemek için yukarıdan bir prompt seçin.",
-        "createFirst": "İlk son işlem promptunuzu oluşturmak için yukarıdaki “Yeni Prompt Oluştur” seçeneğine tıklayın."
+        "description": "Bu sekmenin dökümünüzle ne yaptığı. Dökümün geleceği yere ${output} yazın."
+      },
+      "profiles": {
+        "tabsLabel": "Son işleme sekmeleri",
+        "add": "Son işleme ekle",
+        "newName": "Son İşleme {{number}}",
+        "empty": "Henüz son işleme sekmesi yok. Eklemek için + simgesine tıklayın.",
+        "name": {
+          "title": "Ad",
+          "description": "Sekmede ve kısayol mesajlarında gösterilir."
+        },
+        "shortcut": {
+          "title": "Kısayol",
+          "description": "Sesinizi kaydeder, metne döker ve bu sekmenin son işlemesini uygular."
+        },
+        "delete": {
+          "button": "Sil",
+          "title": "“{{name}}” silinsin mi?",
+          "description": "Sekme, ayarları ve kısayolu kaldırılacak. Bu işlem geri alınamaz.",
+          "confirm": "Sil",
+          "cancel": "İptal"
+        },
+        "errors": {
+          "add": "Son işleme eklenemedi: {{error}}",
+          "save": "Kaydedilemedi: {{error}}",
+          "delete": "Silinemedi: {{error}}",
+          "fetchModels": "Modeller yüklenemedi: {{error}}"
+        }
       }
     },
     "history": {

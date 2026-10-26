@@ -176,8 +176,10 @@
         "errors": {
           "restore": "元のショートカットを復元できませんでした",
           "set": "ショートカットを設定できませんでした: {{error}}",
-          "reset": "ショートカットを元の値にリセットできませんでした"
-        }
+          "reset": "ショートカットを元の値にリセットできませんでした",
+          "conflict": "{{shortcut}} は「{{name}}」で使用中です。別のショートカットを選んでください。"
+        },
+        "notSet": "未設定"
       },
       "language": {
         "title": "言語",
@@ -382,9 +384,6 @@
       }
     },
     "postProcessing": {
-      "hotkey": {
-        "title": "ショートカット"
-      },
       "api": {
         "title": "API",
         "provider": {
@@ -424,24 +423,37 @@
       },
       "prompts": {
         "title": "プロンプト",
-        "selectedPrompt": {
-          "title": "選択したプロンプト",
-          "description": "文字起こしを改善するテンプレートを選択するか、新しく作成します。プロンプトテキスト内で ${output} を使用して、キャプチャした文字起こしを参照します。"
-        },
-        "noPrompts": "プロンプトがありません",
-        "selectPrompt": "プロンプトを選択",
-        "createNew": "新しいプロンプトを作成",
-        "promptLabel": "プロンプト名",
-        "promptLabelPlaceholder": "プロンプト名を入力",
         "promptInstructions": "プロンプトの指示",
         "promptInstructionsPlaceholder": "文字起こし後に実行する指示を記述します。例: 以下のテキストの文法と明瞭さを改善してください: ${output}",
         "promptTip": "ヒント: <code>${output}</code> を使用して、文字起こしテキストをプロンプトに挿入します。",
-        "updatePrompt": "プロンプトを更新",
-        "deletePrompt": "プロンプトを削除",
-        "createPrompt": "プロンプトを作成",
-        "cancel": "キャンセル",
-        "selectToEdit": "上からプロンプトを選択して、詳細を表示・編集します。",
-        "createFirst": "上の「新しいプロンプトを作成」をクリックして、最初の後処理プロンプトを作成してください。"
+        "description": "このタブで文字起こしをどう処理するか。文字起こしを入れる位置に ${output} を書きます。"
+      },
+      "profiles": {
+        "tabsLabel": "後処理タブ",
+        "add": "後処理を追加",
+        "newName": "後処理 {{number}}",
+        "empty": "後処理タブはまだありません。+ をクリックして追加します。",
+        "name": {
+          "title": "名前",
+          "description": "タブとショートカットのメッセージに表示されます。"
+        },
+        "shortcut": {
+          "title": "ショートカット",
+          "description": "音声を録音して文字起こしし、このタブの後処理を適用します。"
+        },
+        "delete": {
+          "button": "削除",
+          "title": "「{{name}}」を削除しますか？",
+          "description": "このタブとその設定、ショートカットを削除します。元に戻せません。",
+          "confirm": "削除",
+          "cancel": "キャンセル"
+        },
+        "errors": {
+          "add": "後処理を追加できませんでした: {{error}}",
+          "save": "保存できませんでした: {{error}}",
+          "delete": "削除できませんでした: {{error}}",
+          "fetchModels": "モデルを読み込めませんでした: {{error}}"
+        }
       }
     },
     "history": {

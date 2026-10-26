@@ -149,8 +149,10 @@
         "errors": {
           "restore": "Misslyckades med att återställa ursprungligt kortkommando",
           "set": "Misslyckades med att ställa in kortkommando: {{error}}",
-          "reset": "Misslyckades med att återställa kortkommando till ursprungsvärdet"
-        }
+          "reset": "Misslyckades med att återställa kortkommando till ursprungsvärdet",
+          "conflict": "{{shortcut}} används redan av ”{{name}}”. Välj ett annat kortkommando."
+        },
+        "notSet": "Inte angivet"
       },
       "language": {
         "title": "Språk",
@@ -382,9 +384,6 @@
       }
     },
     "postProcessing": {
-      "hotkey": {
-        "title": "Snabbkommando"
-      },
       "api": {
         "title": "API",
         "provider": {
@@ -424,24 +423,37 @@
       },
       "prompts": {
         "title": "Prompt",
-        "selectedPrompt": {
-          "title": "Vald prompt",
-          "description": "Välj en mall för att förfina transkriptioner eller skapa en ny. Använd ${output} inuti prompttexten för att referera till den fångade transkriptionen."
-        },
-        "noPrompts": "Inga prompter tillgängliga",
-        "selectPrompt": "Välj en prompt",
-        "createNew": "Skapa ny prompt",
-        "promptLabel": "Prompt-etikett",
-        "promptLabelPlaceholder": "Ange namn på prompt",
         "promptInstructions": "Prompt-instruktioner",
         "promptInstructionsPlaceholder": "Skriv instruktionerna som ska köras efter transkription. Exempel: Förbättra grammatik och tydlighet för följande text: ${output}",
         "promptTip": "Tips: Använd <code>${output}</code> för att infoga den transkriberade texten i din prompt.",
-        "updatePrompt": "Uppdatera prompt",
-        "deletePrompt": "Ta bort prompt",
-        "createPrompt": "Skapa prompt",
-        "cancel": "Avbryt",
-        "selectToEdit": "Välj en prompt ovan för att visa och redigera dess detaljer.",
-        "createFirst": "Klicka på 'Skapa ny prompt' ovan för att skapa din första prompt för efterbearbetning."
+        "description": "Vad den här fliken gör med din transkription. Skriv ${output} där transkriptionen ska stå."
+      },
+      "profiles": {
+        "tabsLabel": "Efterbearbetningsflikar",
+        "add": "Lägg till efterbearbetning",
+        "newName": "Efterbearbetning {{number}}",
+        "empty": "Inga efterbearbetningsflikar än. Klicka på + för att lägga till en.",
+        "name": {
+          "title": "Namn",
+          "description": "Visas på fliken och i meddelanden om kortkommandon."
+        },
+        "shortcut": {
+          "title": "Kortkommando",
+          "description": "Spelar in din röst, transkriberar den och tillämpar den här flikens efterbearbetning."
+        },
+        "delete": {
+          "button": "Ta bort",
+          "title": "Ta bort ”{{name}}”?",
+          "description": "Fliken, dess inställningar och dess kortkommando tas bort. Det går inte att ångra.",
+          "confirm": "Ta bort",
+          "cancel": "Avbryt"
+        },
+        "errors": {
+          "add": "Det gick inte att lägga till efterbearbetning: {{error}}",
+          "save": "Det gick inte att spara: {{error}}",
+          "delete": "Det gick inte att ta bort: {{error}}",
+          "fetchModels": "Det gick inte att läsa in modeller: {{error}}"
+        }
       }
     },
     "history": {

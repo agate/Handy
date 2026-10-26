@@ -232,85 +232,56 @@ async changeExperimentalEnabledSetting(enabled: boolean) : Promise<Result<null, 
     else return { status: "error", error: e  as any };
 }
 },
-async changePostProcessBaseUrlSetting(providerId: string, baseUrl: string) : Promise<Result<null, string>> {
+/**
+ * Adds a post-processing profile. Its shortcut starts unassigned, so nothing
+ * is registered until the user picks one.
+ */
+async addPostProcessProfile(name: string) : Promise<Result<PostProcessProfile, string>> {
     try {
-    return { status: "ok", data: await TAURI_INVOKE("change_post_process_base_url_setting", { providerId, baseUrl }) };
+    return { status: "ok", data: await TAURI_INVOKE("add_post_process_profile", { name }) };
 } catch (e) {
     if(e instanceof Error) throw e;
     else return { status: "error", error: e  as any };
 }
 },
-async changePostProcessApiFormatSetting(providerId: string, apiFormat: PostProcessApiFormat) : Promise<Result<null, string>> {
+/**
+ * Saves every editable field of a profile. Its shortcut is changed through
+ * `change_binding` like any other.
+ */
+async updatePostProcessProfile(profile: PostProcessProfile) : Promise<Result<null, string>> {
     try {
-    return { status: "ok", data: await TAURI_INVOKE("change_post_process_api_format_setting", { providerId, apiFormat }) };
+    return { status: "ok", data: await TAURI_INVOKE("update_post_process_profile", { profile }) };
 } catch (e) {
     if(e instanceof Error) throw e;
     else return { status: "error", error: e  as any };
 }
 },
-async changePostProcessApiKeySetting(providerId: string, apiKey: string) : Promise<Result<null, string>> {
+async deletePostProcessProfile(id: string) : Promise<Result<null, string>> {
     try {
-    return { status: "ok", data: await TAURI_INVOKE("change_post_process_api_key_setting", { providerId, apiKey }) };
+    return { status: "ok", data: await TAURI_INVOKE("delete_post_process_profile", { id }) };
 } catch (e) {
     if(e instanceof Error) throw e;
     else return { status: "error", error: e  as any };
 }
 },
-async changePostProcessModelSetting(providerId: string, model: string) : Promise<Result<null, string>> {
+/**
+ * Lists the models a profile's provider offers, using that profile's own key
+ * and base URL.
+ */
+async fetchPostProcessProfileModels(profileId: string) : Promise<Result<string[], string>> {
     try {
-    return { status: "ok", data: await TAURI_INVOKE("change_post_process_model_setting", { providerId, model }) };
+    return { status: "ok", data: await TAURI_INVOKE("fetch_post_process_profile_models", { profileId }) };
 } catch (e) {
     if(e instanceof Error) throw e;
     else return { status: "error", error: e  as any };
 }
 },
-async setPostProcessProvider(providerId: string) : Promise<Result<null, string>> {
-    try {
-    return { status: "ok", data: await TAURI_INVOKE("set_post_process_provider", { providerId }) };
-} catch (e) {
-    if(e instanceof Error) throw e;
-    else return { status: "error", error: e  as any };
-}
-},
-async fetchPostProcessModels(providerId: string) : Promise<Result<string[], string>> {
-    try {
-    return { status: "ok", data: await TAURI_INVOKE("fetch_post_process_models", { providerId }) };
-} catch (e) {
-    if(e instanceof Error) throw e;
-    else return { status: "error", error: e  as any };
-}
-},
-async addPostProcessPrompt(name: string, prompt: string) : Promise<Result<LLMPrompt, string>> {
-    try {
-    return { status: "ok", data: await TAURI_INVOKE("add_post_process_prompt", { name, prompt }) };
-} catch (e) {
-    if(e instanceof Error) throw e;
-    else return { status: "error", error: e  as any };
-}
-},
-async updatePostProcessPrompt(id: string, name: string, prompt: string) : Promise<Result<null, string>> {
-    try {
-    return { status: "ok", data: await TAURI_INVOKE("update_post_process_prompt", { id, name, prompt }) };
-} catch (e) {
-    if(e instanceof Error) throw e;
-    else return { status: "error", error: e  as any };
-}
-},
-async deletePostProcessPrompt(id: string) : Promise<Result<null, string>> {
-    try {
-    return { status: "ok", data: await TAURI_INVOKE("delete_post_process_prompt", { id }) };
-} catch (e) {
-    if(e instanceof Error) throw e;
-    else return { status: "error", error: e  as any };
-}
-},
-async setPostProcessSelectedPrompt(id: string) : Promise<Result<null, string>> {
-    try {
-    return { status: "ok", data: await TAURI_INVOKE("set_post_process_selected_prompt", { id }) };
-} catch (e) {
-    if(e instanceof Error) throw e;
-    else return { status: "error", error: e  as any };
-}
+/**
+ * Id of the binding that already uses `binding`'s keys, if any, so the UI can
+ * name it before trying the change.
+ */
+async findBindingConflict(id: string, binding: string) : Promise<string | null> {
+    return await TAURI_INVOKE("find_binding_conflict", { id, binding });
 },
 async updateCustomWords(words: string[]) : Promise<Result<null, string>> {
     try {
@@ -1009,7 +980,14 @@ whats_new_last_seen_version?: string; selected_model?: string; onboarding_comple
  * Which input channel to use on the selected microphone device.
  * None means "average all channels" (original behavior).
  */
-selected_channel?: number | null; clamshell_microphone?: string | null; selected_output_device?: string | null; translate_to_english?: boolean; selected_language?: string; overlay_position?: OverlayPosition; debug_mode?: boolean; log_level?: LogLevel; custom_words?: string[]; model_unload_timeout?: ModelUnloadTimeout; word_correction_threshold?: number; history_limit?: number; recording_retention_period?: RecordingRetentionPeriod; paste_method?: PasteMethod; clipboard_handling?: ClipboardHandling; auto_submit?: boolean; auto_submit_key?: AutoSubmitKey; post_process_enabled?: boolean; post_process_provider_id?: string; post_process_providers?: PostProcessProvider[]; post_process_api_keys?: SecretMap; post_process_models?: Partial<{ [key in string]: string }>; post_process_prompts?: LLMPrompt[]; post_process_selected_prompt_id?: string | null; mute_while_recording?: boolean; append_trailing_space?: boolean; app_language?: string; theme?: Theme; experimental_enabled?: boolean; lazy_stream_close?: boolean; keyboard_implementation?: KeyboardImplementation; show_tray_icon?: boolean; paste_delay_ms?: number; paste_delay_after_ms?: number; 
+selected_channel?: number | null; clamshell_microphone?: string | null; selected_output_device?: string | null; translate_to_english?: boolean; selected_language?: string; overlay_position?: OverlayPosition; debug_mode?: boolean; log_level?: LogLevel; custom_words?: string[]; model_unload_timeout?: ModelUnloadTimeout; word_correction_threshold?: number; history_limit?: number; recording_retention_period?: RecordingRetentionPeriod; paste_method?: PasteMethod; clipboard_handling?: ClipboardHandling; auto_submit?: boolean; auto_submit_key?: AutoSubmitKey; post_process_enabled?: boolean; post_process_provider_id?: string; post_process_providers?: PostProcessProvider[]; post_process_api_keys?: SecretMap; post_process_models?: Partial<{ [key in string]: string }>; post_process_prompts?: LLMPrompt[]; post_process_selected_prompt_id?: string | null; 
+/**
+ * Independent post-processing actions, each with its own shortcut. The
+ * `post_process_*` fields above are only read to migrate stores written
+ * before profiles existed; `post_process_providers` stays the catalog of
+ * providers a profile can pick from.
+ */
+post_process_profiles?: PostProcessProfile[]; mute_while_recording?: boolean; append_trailing_space?: boolean; app_language?: string; theme?: Theme; experimental_enabled?: boolean; lazy_stream_close?: boolean; keyboard_implementation?: KeyboardImplementation; show_tray_icon?: boolean; paste_delay_ms?: number; paste_delay_after_ms?: number; 
 /**
  * Debug-gated ("beta") receipt-sequenced paste: restore the clipboard only
  * after the target app actually reads the transcript, instead of after a
@@ -1059,7 +1037,12 @@ export type ChineseScript =
 export type ClipboardHandling = "dont_modify" | "copy_to_clipboard"
 export type CustomSounds = { start: boolean; stop: boolean }
 export type GpuDeviceOption = { id: string; name: string; total_vram_mb: number }
-export type HistoryEntry = { id: number; file_name: string; timestamp: number; saved: boolean; title: string; transcription_text: string; post_processed_text: string | null; post_process_prompt: string | null; post_process_requested: boolean }
+export type HistoryEntry = { id: number; file_name: string; timestamp: number; saved: boolean; title: string; transcription_text: string; post_processed_text: string | null; post_process_prompt: string | null; post_process_requested: boolean; 
+/**
+ * The post-processing profile the recording was made with, so a retry
+ * runs the same one. Empty for plain transcriptions and older entries.
+ */
+post_process_profile_id: string | null }
 export type HistoryUpdatePayload = { action: "added"; entry: HistoryEntry } | { action: "updated"; entry: HistoryEntry } | { action: "deleted"; id: number } | { action: "toggled"; id: number }
 /**
  * Result of changing keyboard implementation
@@ -1128,6 +1111,21 @@ export type PostProcessApiFormat =
  * Anthropic Messages (`/messages`)
  */
 "anthropic"
+/**
+ * One post-processing action with its own shortcut. Every field belongs to
+ * the profile alone: two profiles on the same provider keep separate keys,
+ * base URLs, models and prompts.
+ */
+export type PostProcessProfile = { id: string; name: string; provider_id: string; 
+/**
+ * Used only by providers that allow editing it (the custom provider);
+ * built-in providers always use their catalog URL.
+ */
+base_url?: string; 
+/**
+ * Used only by the custom provider; built-in providers have a fixed format.
+ */
+api_format?: PostProcessApiFormat; api_key?: string; model?: string; prompt?: string }
 export type PostProcessProvider = { id: string; label: string; base_url: string; allow_base_url_edit?: boolean; models_endpoint?: string | null; supports_structured_output?: boolean; api_format?: PostProcessApiFormat }
 export type RecordingRetentionPeriod = "never" | "preserve_limit" | "days_3" | "weeks_2" | "months_3"
 /**

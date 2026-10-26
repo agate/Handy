@@ -176,8 +176,10 @@
         "errors": {
           "restore": "Không thể khôi phục phím tắt gốc",
           "set": "Không thể đặt phím tắt: {{error}}",
-          "reset": "Không thể đặt lại phím tắt về giá trị gốc"
-        }
+          "reset": "Không thể đặt lại phím tắt về giá trị gốc",
+          "conflict": "{{shortcut}} đã được “{{name}}” sử dụng. Hãy chọn phím tắt khác."
+        },
+        "notSet": "Chưa đặt"
       },
       "language": {
         "title": "Ngôn ngữ",
@@ -382,9 +384,6 @@
       }
     },
     "postProcessing": {
-      "hotkey": {
-        "title": "Phím tắt"
-      },
       "api": {
         "title": "API",
         "provider": {
@@ -424,24 +423,37 @@
       },
       "prompts": {
         "title": "Câu lệnh",
-        "selectedPrompt": {
-          "title": "Prompt đã chọn",
-          "description": "Chọn một mẫu để tinh chỉnh bản ghi hoặc tạo mới. Sử dụng ${output} trong văn bản prompt để tham chiếu bản ghi đã chụp."
-        },
-        "noPrompts": "Không có prompt nào",
-        "selectPrompt": "Chọn một prompt",
-        "createNew": "Tạo Prompt mới",
-        "promptLabel": "Nhãn Prompt",
-        "promptLabelPlaceholder": "Nhập tên prompt",
         "promptInstructions": "Hướng dẫn Prompt",
         "promptInstructionsPlaceholder": "Viết hướng dẫn để chạy sau khi chuyển đổi. Ví dụ: Cải thiện ngữ pháp và độ rõ ràng cho văn bản sau: ${output}",
         "promptTip": "Mẹo: Sử dụng <code>${output}</code> để chèn văn bản đã chuyển đổi vào prompt của bạn.",
-        "updatePrompt": "Cập nhật Prompt",
-        "deletePrompt": "Xóa Prompt",
-        "createPrompt": "Tạo Prompt",
-        "cancel": "Hủy",
-        "selectToEdit": "Chọn một prompt ở trên để xem và chỉnh sửa chi tiết.",
-        "createFirst": "Nhấn 'Tạo Prompt mới' ở trên để tạo prompt xử lý sau đầu tiên của bạn."
+        "description": "Tab này làm gì với bản chép lời của bạn. Dùng ${output} ở chỗ cần chèn bản chép lời."
+      },
+      "profiles": {
+        "tabsLabel": "Các tab hậu xử lý",
+        "add": "Thêm hậu xử lý",
+        "newName": "Hậu xử lý {{number}}",
+        "empty": "Chưa có tab hậu xử lý nào. Nhấn + để thêm.",
+        "name": {
+          "title": "Tên",
+          "description": "Hiển thị trên tab và trong thông báo phím tắt."
+        },
+        "shortcut": {
+          "title": "Phím tắt",
+          "description": "Ghi âm giọng nói, chép lời rồi áp dụng hậu xử lý của tab này."
+        },
+        "delete": {
+          "button": "Xóa",
+          "title": "Xóa “{{name}}”?",
+          "description": "Tab, các cài đặt và phím tắt của nó sẽ bị xóa. Không thể hoàn tác.",
+          "confirm": "Xóa",
+          "cancel": "Hủy"
+        },
+        "errors": {
+          "add": "Không thể thêm hậu xử lý: {{error}}",
+          "save": "Không thể lưu: {{error}}",
+          "delete": "Không thể xóa: {{error}}",
+          "fetchModels": "Không thể tải mô hình: {{error}}"
+        }
       }
     },
     "history": {

@@ -149,8 +149,10 @@
         "errors": {
           "restore": "원래 단축키 복원에 실패했습니다",
           "set": "단축키 설정 실패: {{error}}",
-          "reset": "단축키를 원래 값으로 재설정하는데 실패했습니다"
-        }
+          "reset": "단축키를 원래 값으로 재설정하는데 실패했습니다",
+          "conflict": "{{shortcut}}은(는) 이미 “{{name}}”에서 사용 중입니다. 다른 단축키를 선택하세요."
+        },
+        "notSet": "설정 안 됨"
       },
       "language": {
         "title": "언어",
@@ -382,9 +384,6 @@
       }
     },
     "postProcessing": {
-      "hotkey": {
-        "title": "단축키"
-      },
       "api": {
         "title": "API",
         "provider": {
@@ -424,24 +423,37 @@
       },
       "prompts": {
         "title": "프롬프트",
-        "selectedPrompt": {
-          "title": "선택된 프롬프트",
-          "description": "텍스트 변환을 개선하기 위한 템플릿을 선택하거나 새로 만드세요. 프롬프트 텍스트 내에서 ${output}를 사용하여 캡처된 텍스트를 참조하세요."
-        },
-        "noPrompts": "사용 가능한 프롬프트 없음",
-        "selectPrompt": "프롬프트 선택",
-        "createNew": "새 프롬프트 만들기",
-        "promptLabel": "프롬프트 레이블",
-        "promptLabelPlaceholder": "프롬프트 이름 입력",
         "promptInstructions": "프롬프트 지시사항",
         "promptInstructionsPlaceholder": "텍스트 변환 후 실행할 지시사항을 작성하세요. 예: 다음 텍스트의 문법과 명확성을 개선하세요: ${output}",
         "promptTip": "팁: 프롬프트에서 변환된 텍스트를 삽입하려면 <code>${output}</code>을 사용하세요.",
-        "updatePrompt": "프롬프트 업데이트",
-        "deletePrompt": "프롬프트 삭제",
-        "createPrompt": "프롬프트 만들기",
-        "cancel": "취소",
-        "selectToEdit": "세부 정보를 보고 편집하려면 위에서 프롬프트를 선택하세요.",
-        "createFirst": "첫 번째 후처리 프롬프트를 만들려면 위의 '새 프롬프트 만들기'를 클릭하세요."
+        "description": "이 탭이 전사 결과를 처리하는 방법입니다. 전사 내용이 들어갈 위치에 ${output}을 쓰세요."
+      },
+      "profiles": {
+        "tabsLabel": "후처리 탭",
+        "add": "후처리 추가",
+        "newName": "후처리 {{number}}",
+        "empty": "아직 후처리 탭이 없습니다. +를 눌러 추가하세요.",
+        "name": {
+          "title": "이름",
+          "description": "탭과 단축키 메시지에 표시됩니다."
+        },
+        "shortcut": {
+          "title": "단축키",
+          "description": "음성을 녹음하고 전사한 뒤 이 탭의 후처리를 적용합니다."
+        },
+        "delete": {
+          "button": "삭제",
+          "title": "“{{name}}”을(를) 삭제할까요?",
+          "description": "이 탭과 설정, 단축키가 삭제됩니다. 되돌릴 수 없습니다.",
+          "confirm": "삭제",
+          "cancel": "취소"
+        },
+        "errors": {
+          "add": "후처리를 추가하지 못했습니다: {{error}}",
+          "save": "저장하지 못했습니다: {{error}}",
+          "delete": "삭제하지 못했습니다: {{error}}",
+          "fetchModels": "모델을 불러오지 못했습니다: {{error}}"
+        }
       }
     },
     "history": {

@@ -10,12 +10,15 @@ import { commands } from "@/bindings";
 import { toast } from "sonner";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { SECURE_INPUT_HELP_URL } from "../SecureInputWarning";
+import { useShortcutConflict } from "./useShortcutConflict";
 
 interface HandyKeysShortcutInputProps {
   descriptionMode?: "inline" | "tooltip";
   grouped?: boolean;
   shortcutId: string;
   disabled?: boolean;
+  title?: string;
+  description?: string;
 }
 
 interface HandyKeysEvent {
@@ -30,8 +33,11 @@ export const HandyKeysShortcutInput: React.FC<HandyKeysShortcutInputProps> = ({
   grouped = false,
   shortcutId,
   disabled = false,
+  title,
+  description,
 }) => {
   const { t } = useTranslation();
+  const findConflict = useShortcutConflict();
   const { getSetting, updateBinding, resetBinding, isUpdating, isLoading } =
     useSettings();
   const [isRecording, setIsRecording] = useState(false);
@@ -92,23 +98,29 @@ export const HandyKeysShortcutInput: React.FC<HandyKeysShortcutInputProps> = ({
     const setupListener = async () => {
       // Listen for key events from backend
       const commitAndStop = async (keysToCommit: string) => {
-        try {
-          await updateBinding(shortcutId, keysToCommit);
-        } catch (error) {
-          console.error("Failed to change binding:", error);
-          toast.error(
-            t("settings.general.shortcut.errors.set", {
-              error: String(error),
-            }),
-          );
+        // Nothing has been saved yet, so a clash only needs the message
+        const conflict = await findConflict(shortcutId, keysToCommit);
+        if (conflict) {
+          toast.error(conflict);
+        } else {
+          try {
+            await updateBinding(shortcutId, keysToCommit);
+          } catch (error) {
+            console.error("Failed to change binding:", error);
+            toast.error(
+              t("settings.general.shortcut.errors.set", {
+                error: String(error),
+              }),
+            );
 
-          // Reset to original binding on error
-          if (originalBinding) {
-            try {
-              await updateBinding(shortcutId, originalBinding);
-            } catch (resetError) {
-              console.error("Failed to reset binding:", resetError);
-              toast.error(t("settings.general.shortcut.errors.reset"));
+            // Reset to original binding on error
+            if (originalBinding) {
+              try {
+                await updateBinding(shortcutId, originalBinding);
+              } catch (resetError) {
+                console.error("Failed to reset binding:", resetError);
+                toast.error(t("settings.general.shortcut.errors.reset"));
+              }
             }
           }
         }
@@ -187,6 +199,7 @@ export const HandyKeysShortcutInput: React.FC<HandyKeysShortcutInputProps> = ({
     originalBinding,
     updateBinding,
     cancelRecording,
+    findConflict,
     t,
   ]);
 
@@ -305,14 +318,15 @@ export const HandyKeysShortcutInput: React.FC<HandyKeysShortcutInputProps> = ({
   }
 
   // Get translated name and description for the binding
-  const translatedName = t(
-    `settings.general.shortcut.bindings.${shortcutId}.name`,
-    binding.name,
-  );
-  const translatedDescription = t(
-    `settings.general.shortcut.bindings.${shortcutId}.description`,
-    binding.description,
-  );
+  const translatedName =
+    title ??
+    t(`settings.general.shortcut.bindings.${shortcutId}.name`, binding.name);
+  const translatedDescription =
+    description ??
+    t(
+      `settings.general.shortcut.bindings.${shortcutId}.description`,
+      binding.description,
+    );
 
   return (
     <SettingContainer
@@ -336,13 +350,27 @@ export const HandyKeysShortcutInput: React.FC<HandyKeysShortcutInputProps> = ({
             className="px-2 py-1 text-sm font-semibold bg-mid-gray/10 border border-mid-gray/80 hover:bg-logo-primary/10 rounded-md cursor-pointer hover:border-logo-primary"
             onClick={startRecording}
           >
-            {formatKeyCombination(binding.current_binding, osType)}
+            {binding.current_binding
+              ? formatKeyCombination(binding.current_binding, osType)
+              : t("settings.general.shortcut.notSet")}
           </div>
         )}
-        <ResetButton
-          onClick={() => resetBinding(shortcutId)}
-          disabled={isUpdating(`binding_${shortcutId}`)}
-        />
+        {binding.default_binding && (
+          <ResetButton
+            onClick={async () => {
+              const conflict = await findConflict(
+                shortcutId,
+                binding.default_binding,
+              );
+              if (conflict) {
+                toast.error(conflict);
+                return;
+              }
+              await resetBinding(shortcutId);
+            }}
+            disabled={isUpdating(`binding_${shortcutId}`)}
+          />
+        )}
       </div>
     </SettingContainer>
   );

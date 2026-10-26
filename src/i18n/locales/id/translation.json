@@ -149,8 +149,10 @@
         "errors": {
           "restore": "Gagal memulihkan pintasan asli",
           "set": "Gagal mengatur pintasan: {{error}}",
-          "reset": "Gagal mengembalikan pintasan ke nilai awal"
-        }
+          "reset": "Gagal mengembalikan pintasan ke nilai awal",
+          "conflict": "{{shortcut}} sudah dipakai oleh “{{name}}”. Pilih pintasan lain."
+        },
+        "notSet": "Belum diatur"
       },
       "language": {
         "title": "Bahasa",
@@ -382,9 +384,6 @@
       }
     },
     "postProcessing": {
-      "hotkey": {
-        "title": "Pintasan"
-      },
       "api": {
         "title": "API",
         "provider": {
@@ -424,24 +423,37 @@
       },
       "prompts": {
         "title": "Prompt",
-        "selectedPrompt": {
-          "title": "Prompt Terpilih",
-          "description": "Pilih templat untuk menyempurnakan transkripsi atau buat yang baru. Gunakan ${output} dalam teks prompt untuk merujuk ke hasil transkripsi."
-        },
-        "noPrompts": "Tidak ada prompt yang tersedia",
-        "selectPrompt": "Pilih prompt",
-        "createNew": "Buat Prompt Baru",
-        "promptLabel": "Label Prompt",
-        "promptLabelPlaceholder": "Masukkan nama prompt",
         "promptInstructions": "Instruksi Prompt",
         "promptInstructionsPlaceholder": "Tulis instruksi yang dijalankan setelah transkripsi. Contoh: Perbaiki tata bahasa dan kejelasan teks berikut: ${output}",
         "promptTip": "Tips: Gunakan <code>${output}</code> untuk menyisipkan teks hasil transkripsi ke prompt Anda.",
-        "updatePrompt": "Perbarui Prompt",
-        "deletePrompt": "Hapus Prompt",
-        "createPrompt": "Buat Prompt",
-        "cancel": "Batal",
-        "selectToEdit": "Pilih prompt di atas untuk melihat dan mengedit detailnya.",
-        "createFirst": "Klik 'Buat Prompt Baru' di atas untuk membuat prompt pascaproses pertama Anda."
+        "description": "Apa yang dilakukan tab ini pada transkrip Anda. Gunakan ${output} di tempat transkrip harus muncul."
+      },
+      "profiles": {
+        "tabsLabel": "Tab pascaproses",
+        "add": "Tambah pascaproses",
+        "newName": "Pascaproses {{number}}",
+        "empty": "Belum ada tab pascaproses. Klik + untuk menambahkan.",
+        "name": {
+          "title": "Nama",
+          "description": "Ditampilkan di tab dan pesan pintasan."
+        },
+        "shortcut": {
+          "title": "Pintasan",
+          "description": "Merekam suara Anda, mentranskripsikannya, lalu menerapkan pascaproses tab ini."
+        },
+        "delete": {
+          "button": "Hapus",
+          "title": "Hapus “{{name}}”?",
+          "description": "Tab, pengaturannya, dan pintasannya akan dihapus. Tindakan ini tidak dapat dibatalkan.",
+          "confirm": "Hapus",
+          "cancel": "Batal"
+        },
+        "errors": {
+          "add": "Gagal menambahkan pascaproses: {{error}}",
+          "save": "Gagal menyimpan: {{error}}",
+          "delete": "Gagal menghapus: {{error}}",
+          "fetchModels": "Gagal memuat model: {{error}}"
+        }
       }
     },
     "history": {

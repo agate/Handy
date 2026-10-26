@@ -176,8 +176,10 @@
         "errors": {
           "restore": "Errore nel ripristino della scorciatoia originale",
           "set": "Errore nella configurazione della scorciatoia: {{error}}",
-          "reset": "Errore nella reinizializzazione della scorciatoia al valore originale"
-        }
+          "reset": "Errore nella reinizializzazione della scorciatoia al valore originale",
+          "conflict": "{{shortcut}} è già usata da «{{name}}». Scegli un'altra scorciatoia."
+        },
+        "notSet": "Non impostata"
       },
       "language": {
         "title": "Lingua",
@@ -382,9 +384,6 @@
       }
     },
     "postProcessing": {
-      "hotkey": {
-        "title": "Tasto di scelta rapida"
-      },
       "api": {
         "title": "API",
         "provider": {
@@ -424,24 +423,37 @@
       },
       "prompts": {
         "title": "Prompt",
-        "selectedPrompt": {
-          "title": "Prompt Selezionato",
-          "description": "Seleziona un template per migliorare le trascrizioni o creane uno nuovo. Usa ${output} nel prompt per fare riferimento alla trascrizione."
-        },
-        "noPrompts": "Nessun prompt disponibile",
-        "selectPrompt": "Scegli un prompt",
-        "createNew": "Crea un nuovo prompt",
-        "promptLabel": "Etichetta del Prompt",
-        "promptLabelPlaceholder": "Inserisci il nome del prompt",
         "promptInstructions": "Istruzioni del Prompt",
         "promptInstructionsPlaceholder": "Scrivi le istruzioni da eseguire dopo la trascrizione. Esempio: Migliora la grammatica e la chiarezza per il seguente testo: ${output}",
         "promptTip": "Suggerimento: Usa <code>${output}</code> per inserire il testo trascritto nel tuo prompt.",
-        "updatePrompt": "Aggiorna Prompt",
-        "deletePrompt": "Elimina Prompt",
-        "createPrompt": "Crea Prompt",
-        "cancel": "Annulla",
-        "selectToEdit": "Scegli un prompt qui sopra per visualizzare o modificare i dettagli.",
-        "createFirst": "Clicca 'Crea un nuovo prompt' qui sopra per creare il tuo primo prompt di post-elaborazione."
+        "description": "Cosa fa questa scheda con la tua trascrizione. Usa ${output} dove deve comparire la trascrizione."
+      },
+      "profiles": {
+        "tabsLabel": "Schede di post-elaborazione",
+        "add": "Aggiungi post-elaborazione",
+        "newName": "Post-elaborazione {{number}}",
+        "empty": "Ancora nessuna scheda di post-elaborazione. Fai clic su + per aggiungerne una.",
+        "name": {
+          "title": "Nome",
+          "description": "Mostrato sulla scheda e nei messaggi delle scorciatoie."
+        },
+        "shortcut": {
+          "title": "Scorciatoia",
+          "description": "Registra la tua voce, la trascrive e applica la post-elaborazione di questa scheda."
+        },
+        "delete": {
+          "button": "Elimina",
+          "title": "Eliminare «{{name}}»?",
+          "description": "Verranno rimossi la scheda, le sue impostazioni e la sua scorciatoia. L'operazione non può essere annullata.",
+          "confirm": "Elimina",
+          "cancel": "Annulla"
+        },
+        "errors": {
+          "add": "Impossibile aggiungere la post-elaborazione: {{error}}",
+          "save": "Salvataggio non riuscito: {{error}}",
+          "delete": "Eliminazione non riuscita: {{error}}",
+          "fetchModels": "Impossibile caricare i modelli: {{error}}"
+        }
       }
     },
     "history": {

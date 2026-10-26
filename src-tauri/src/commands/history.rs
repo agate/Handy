@@ -73,6 +73,21 @@ pub async fn retry_history_entry_transcription(
         .map_err(|e| e.to_string())?
         .ok_or_else(|| format!("History entry {} not found", id))?;
 
+    // Retry with the profile the recording was made with. Entries from before
+    // profiles existed, or whose profile was deleted since, get the default
+    // profile (what the single setup migrated into) or the first one left.
+    let profile_id = if entry.post_process_requested {
+        let settings = crate::settings::get_settings(&app);
+        let resolved =
+            settings.resolve_post_process_profile_id(entry.post_process_profile_id.as_deref());
+        if resolved.is_none() {
+            return Err("No post-processing profile exists to retry this recording with".into());
+        }
+        resolved
+    } else {
+        None
+    };
+
     let audio_path = history_manager.get_audio_file_path(&entry.file_name);
     let samples = crate::audio_toolkit::read_wav_samples(&audio_path)
         .map_err(|e| format!("Failed to load audio: {}", e))?;
@@ -93,8 +108,7 @@ pub async fn retry_history_entry_transcription(
         return Err("Recording contains no speech".to_string());
     }
 
-    let processed =
-        process_transcription_output(&app, &transcription, entry.post_process_requested).await;
+    let processed = process_transcription_output(&app, &transcription, profile_id.as_deref()).await;
     history_manager
         .update_transcription(
             id,

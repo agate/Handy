@@ -176,8 +176,10 @@
         "errors": {
           "restore": "Error al restaurar el atajo original",
           "set": "Error al configurar el atajo: {{error}}",
-          "reset": "Error al restablecer el atajo al valor original"
-        }
+          "reset": "Error al restablecer el atajo al valor original",
+          "conflict": "{{shortcut}} ya lo usa «{{name}}». Elige otro atajo."
+        },
+        "notSet": "Sin asignar"
       },
       "language": {
         "title": "Idioma",
@@ -382,9 +384,6 @@
       }
     },
     "postProcessing": {
-      "hotkey": {
-        "title": "Tecla de acceso rápido"
-      },
       "api": {
         "title": "API",
         "provider": {
@@ -424,24 +423,37 @@
       },
       "prompts": {
         "title": "Prompt",
-        "selectedPrompt": {
-          "title": "Prompt seleccionado",
-          "description": "Selecciona una plantilla para refinar las transcripciones o crea una nueva. Usa ${output} dentro del texto del prompt para hacer referencia a la transcripción capturada."
-        },
-        "noPrompts": "No hay prompts disponibles",
-        "selectPrompt": "Seleccionar un prompt",
-        "createNew": "Crear nuevo prompt",
-        "promptLabel": "Etiqueta del prompt",
-        "promptLabelPlaceholder": "Ingresa el nombre del prompt",
         "promptInstructions": "Instrucciones del prompt",
         "promptInstructionsPlaceholder": "Escribe las instrucciones para ejecutar después de la transcripción. Ejemplo: Mejora la gramática y claridad del siguiente texto: ${output}",
         "promptTip": "Consejo: Usa <code>${output}</code> para insertar el texto transcrito en tu prompt.",
-        "updatePrompt": "Actualizar prompt",
-        "deletePrompt": "Eliminar prompt",
-        "createPrompt": "Crear prompt",
-        "cancel": "Cancelar",
-        "selectToEdit": "Selecciona un prompt arriba para ver y editar sus detalles.",
-        "createFirst": "Haz clic en 'Crear nuevo prompt' arriba para crear tu primer prompt de post procesamiento."
+        "description": "Qué hace esta pestaña con tu transcripción. Usa ${output} donde deba ir la transcripción."
+      },
+      "profiles": {
+        "tabsLabel": "Pestañas de posprocesamiento",
+        "add": "Añadir posprocesamiento",
+        "newName": "Posprocesamiento {{number}}",
+        "empty": "Aún no hay pestañas de posprocesamiento. Haz clic en + para añadir una.",
+        "name": {
+          "title": "Nombre",
+          "description": "Se muestra en la pestaña y en los mensajes de atajos."
+        },
+        "shortcut": {
+          "title": "Atajo",
+          "description": "Graba tu voz, la transcribe y aplica el posprocesamiento de esta pestaña."
+        },
+        "delete": {
+          "button": "Eliminar",
+          "title": "¿Eliminar «{{name}}»?",
+          "description": "Se eliminarán la pestaña, su configuración y su atajo. No se puede deshacer.",
+          "confirm": "Eliminar",
+          "cancel": "Cancelar"
+        },
+        "errors": {
+          "add": "No se pudo añadir el posprocesamiento: {{error}}",
+          "save": "No se pudo guardar: {{error}}",
+          "delete": "No se pudo eliminar: {{error}}",
+          "fetchModels": "No se pudieron cargar los modelos: {{error}}"
+        }
       }
     },
     "history": {

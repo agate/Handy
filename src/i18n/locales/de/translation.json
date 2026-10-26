@@ -176,8 +176,10 @@
         "errors": {
           "restore": "Ursprüngliches Tastenkürzel konnte nicht wiederhergestellt werden",
           "set": "Tastenkürzel konnte nicht gesetzt werden: {{error}}",
-          "reset": "Tastenkürzel konnte nicht auf Originalwert zurückgesetzt werden"
-        }
+          "reset": "Tastenkürzel konnte nicht auf Originalwert zurückgesetzt werden",
+          "conflict": "{{shortcut}} wird bereits von „{{name}}“ verwendet. Wähle ein anderes Tastenkürzel."
+        },
+        "notSet": "Nicht festgelegt"
       },
       "language": {
         "title": "Sprache",
@@ -382,9 +384,6 @@
       }
     },
     "postProcessing": {
-      "hotkey": {
-        "title": "Tastenkürzel"
-      },
       "api": {
         "title": "API",
         "provider": {
@@ -424,24 +423,37 @@
       },
       "prompts": {
         "title": "Prompt",
-        "selectedPrompt": {
-          "title": "Ausgewählter Prompt",
-          "description": "Wähle eine Vorlage zur Verfeinerung von Transkriptionen oder erstelle eine neue. Verwende ${output} im Prompt-Text, um auf das erfasste Transkript zu verweisen."
-        },
-        "noPrompts": "Keine Prompts verfügbar",
-        "selectPrompt": "Prompt auswählen",
-        "createNew": "Neuen Prompt erstellen",
-        "promptLabel": "Prompt-Name",
-        "promptLabelPlaceholder": "Prompt-Namen eingeben",
         "promptInstructions": "Prompt-Anweisungen",
         "promptInstructionsPlaceholder": "Schreibe die Anweisungen, die nach der Transkription ausgeführt werden sollen. Beispiel: Verbessere Grammatik und Klarheit für folgenden Text: ${output}",
         "promptTip": "Tipp: Verwende <code>${output}</code>, um den transkribierten Text in deinen Prompt einzufügen.",
-        "updatePrompt": "Prompt aktualisieren",
-        "deletePrompt": "Prompt löschen",
-        "createPrompt": "Prompt erstellen",
-        "cancel": "Abbrechen",
-        "selectToEdit": "Wähle oben einen Prompt aus, um dessen Details anzuzeigen und zu bearbeiten.",
-        "createFirst": "Klicke oben auf 'Neuen Prompt erstellen', um deinen ersten Nachbearbeitungs-Prompt zu erstellen."
+        "description": "Was dieser Tab mit deinem Transkript macht. Setze ${output} dort ein, wo das Transkript stehen soll."
+      },
+      "profiles": {
+        "tabsLabel": "Nachbearbeitungs-Tabs",
+        "add": "Nachbearbeitung hinzufügen",
+        "newName": "Nachbearbeitung {{number}}",
+        "empty": "Noch keine Nachbearbeitungs-Tabs. Klicke auf +, um einen hinzuzufügen.",
+        "name": {
+          "title": "Name",
+          "description": "Wird auf dem Tab und in Tastenkürzel-Meldungen angezeigt."
+        },
+        "shortcut": {
+          "title": "Tastenkürzel",
+          "description": "Nimmt deine Stimme auf, transkribiert sie und wendet die Nachbearbeitung dieses Tabs an."
+        },
+        "delete": {
+          "button": "Löschen",
+          "title": "„{{name}}“ löschen?",
+          "description": "Dadurch werden der Tab, seine Einstellungen und sein Tastenkürzel entfernt. Das kann nicht rückgängig gemacht werden.",
+          "confirm": "Löschen",
+          "cancel": "Abbrechen"
+        },
+        "errors": {
+          "add": "Nachbearbeitung konnte nicht hinzugefügt werden: {{error}}",
+          "save": "Speichern fehlgeschlagen: {{error}}",
+          "delete": "Löschen fehlgeschlagen: {{error}}",
+          "fetchModels": "Modelle konnten nicht geladen werden: {{error}}"
+        }
       }
     },
     "history": {

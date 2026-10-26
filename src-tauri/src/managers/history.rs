@@ -31,6 +31,7 @@ static MIGRATIONS: &[M] = &[
     M::up("ALTER TABLE transcription_history ADD COLUMN post_processed_text TEXT;"),
     M::up("ALTER TABLE transcription_history ADD COLUMN post_process_prompt TEXT;"),
     M::up("ALTER TABLE transcription_history ADD COLUMN post_process_requested BOOLEAN NOT NULL DEFAULT 0;"),
+    M::up("ALTER TABLE transcription_history ADD COLUMN post_process_profile_id TEXT;"),
 ];
 
 #[derive(Clone, Debug, Serialize, Deserialize, Type)]
@@ -63,6 +64,9 @@ pub struct HistoryEntry {
     pub post_processed_text: Option<String>,
     pub post_process_prompt: Option<String>,
     pub post_process_requested: bool,
+    /// The post-processing profile the recording was made with, so a retry
+    /// runs the same one. Empty for plain transcriptions and older entries.
+    pub post_process_profile_id: Option<String>,
 }
 
 pub struct HistoryManager {
@@ -207,6 +211,7 @@ impl HistoryManager {
             post_processed_text: row.get("post_processed_text")?,
             post_process_prompt: row.get("post_process_prompt")?,
             post_process_requested: row.get("post_process_requested")?,
+            post_process_profile_id: row.get("post_process_profile_id")?,
         })
     }
 
@@ -220,10 +225,11 @@ impl HistoryManager {
         &self,
         file_name: String,
         transcription_text: String,
-        post_process_requested: bool,
+        post_process_profile_id: Option<String>,
         post_processed_text: Option<String>,
         post_process_prompt: Option<String>,
     ) -> Result<HistoryEntry> {
+        let post_process_requested = post_process_profile_id.is_some();
         let timestamp = Utc::now().timestamp();
         let title = self.format_timestamp_title(timestamp);
 
@@ -237,8 +243,9 @@ impl HistoryManager {
                 transcription_text,
                 post_processed_text,
                 post_process_prompt,
-                post_process_requested
-            ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
+                post_process_requested,
+                post_process_profile_id
+            ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
             params![
                 &file_name,
                 timestamp,
@@ -248,6 +255,7 @@ impl HistoryManager {
                 &post_processed_text,
                 &post_process_prompt,
                 post_process_requested,
+                &post_process_profile_id,
             ],
         )?;
 
@@ -261,6 +269,7 @@ impl HistoryManager {
             post_processed_text,
             post_process_prompt,
             post_process_requested,
+            post_process_profile_id,
         };
 
         debug!("Saved history entry with id {}", entry.id);
@@ -308,7 +317,7 @@ impl HistoryManager {
 
         let entry = conn
             .query_row(
-                "SELECT id, file_name, timestamp, saved, title, transcription_text, post_processed_text, post_process_prompt, post_process_requested
+                "SELECT id, file_name, timestamp, saved, title, transcription_text, post_processed_text, post_process_prompt, post_process_requested, post_process_profile_id
                  FROM transcription_history WHERE id = ?1",
                 params![id],
                 Self::map_history_entry,
@@ -459,7 +468,7 @@ impl HistoryManager {
             (Some(cursor_id), Some(lim)) => {
                 let fetch_count = (lim + 1) as i64;
                 let mut stmt = conn.prepare(
-                    "SELECT id, file_name, timestamp, saved, title, transcription_text, post_processed_text, post_process_prompt, post_process_requested
+                    "SELECT id, file_name, timestamp, saved, title, transcription_text, post_processed_text, post_process_prompt, post_process_requested, post_process_profile_id
                      FROM transcription_history
                      WHERE id < ?1
                      ORDER BY id DESC
@@ -473,7 +482,7 @@ impl HistoryManager {
             (None, Some(lim)) => {
                 let fetch_count = (lim + 1) as i64;
                 let mut stmt = conn.prepare(
-                    "SELECT id, file_name, timestamp, saved, title, transcription_text, post_processed_text, post_process_prompt, post_process_requested
+                    "SELECT id, file_name, timestamp, saved, title, transcription_text, post_processed_text, post_process_prompt, post_process_requested, post_process_profile_id
                      FROM transcription_history
                      ORDER BY id DESC
                      LIMIT ?1",
@@ -485,7 +494,7 @@ impl HistoryManager {
             }
             (_, None) => {
                 let mut stmt = conn.prepare(
-                    "SELECT id, file_name, timestamp, saved, title, transcription_text, post_processed_text, post_process_prompt, post_process_requested
+                    "SELECT id, file_name, timestamp, saved, title, transcription_text, post_processed_text, post_process_prompt, post_process_requested, post_process_profile_id
                      FROM transcription_history
                      ORDER BY id DESC",
                 )?;
@@ -516,7 +525,8 @@ impl HistoryManager {
                 transcription_text,
                 post_processed_text,
                 post_process_prompt,
-                post_process_requested
+                post_process_requested,
+                post_process_profile_id
              FROM transcription_history
              ORDER BY timestamp DESC
              LIMIT 1",
@@ -543,7 +553,8 @@ impl HistoryManager {
                 transcription_text,
                 post_processed_text,
                 post_process_prompt,
-                post_process_requested
+                post_process_requested,
+                post_process_profile_id
              FROM transcription_history
              WHERE transcription_text != ''
              ORDER BY timestamp DESC
@@ -597,7 +608,8 @@ impl HistoryManager {
                 transcription_text,
                 post_processed_text,
                 post_process_prompt,
-                post_process_requested
+                post_process_requested,
+                post_process_profile_id
              FROM transcription_history
              WHERE id = ?1",
         )?;
@@ -666,7 +678,8 @@ mod tests {
                 transcription_text TEXT NOT NULL,
                 post_processed_text TEXT,
                 post_process_prompt TEXT,
-                post_process_requested BOOLEAN NOT NULL DEFAULT 0
+                post_process_requested BOOLEAN NOT NULL DEFAULT 0,
+                post_process_profile_id TEXT
             );",
         )
         .expect("create transcription_history table");
@@ -733,5 +746,43 @@ mod tests {
 
         assert_eq!(entry.timestamp, 100);
         assert_eq!(entry.transcription_text, "completed");
+    }
+
+    #[test]
+    fn entries_remember_their_post_processing_profile() {
+        let conn = setup_conn();
+        conn.execute(
+            "INSERT INTO transcription_history (
+                file_name, timestamp, saved, title, transcription_text,
+                post_process_requested, post_process_profile_id
+            ) VALUES ('handy-1.wav', 1, 0, 'Recording', 'text', 1, 'post_process_7')",
+            [],
+        )
+        .expect("insert history entry");
+
+        let entry = HistoryManager::get_latest_entry_with_conn(&conn)
+            .expect("fetch latest entry")
+            .expect("entry exists");
+
+        assert!(entry.post_process_requested);
+        assert_eq!(
+            entry.post_process_profile_id.as_deref(),
+            Some("post_process_7")
+        );
+    }
+
+    #[test]
+    fn migrations_apply_to_a_fresh_database() {
+        let mut conn = Connection::open_in_memory().expect("open in-memory db");
+        Migrations::from_slice(MIGRATIONS)
+            .to_latest(&mut conn)
+            .expect("migrations apply");
+        conn.execute(
+            "INSERT INTO transcription_history (
+                file_name, timestamp, title, transcription_text, post_process_profile_id
+            ) VALUES ('a.wav', 1, 't', 'x', 'post_process_1')",
+            [],
+        )
+        .expect("profile column exists after migrating");
     }
 }

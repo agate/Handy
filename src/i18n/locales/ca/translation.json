@@ -149,8 +149,10 @@
         "errors": {
           "restore": "No s'ha pogut restaurar la drecera original",
           "set": "No s'ha pogut definir la drecera: {{error}}",
-          "reset": "No s'ha pogut restablir la drecera al valor original"
-        }
+          "reset": "No s'ha pogut restablir la drecera al valor original",
+          "conflict": "{{shortcut}} ja l'utilitza «{{name}}». Tria una altra drecera."
+        },
+        "notSet": "Sense assignar"
       },
       "language": {
         "title": "Llengua",
@@ -382,9 +384,6 @@
       }
     },
     "postProcessing": {
-      "hotkey": {
-        "title": "Drecera de teclat"
-      },
       "api": {
         "title": "API",
         "provider": {
@@ -424,24 +423,37 @@
       },
       "prompts": {
         "title": "Indicació",
-        "selectedPrompt": {
-          "title": "Indicació seleccionada",
-          "description": "Seleccioneu una plantilla per millorar les transcripcions o creeu-ne una de nova. Utilitzeu ${output} dins del text de la indicació per fer referència a la transcripció enregistrada."
-        },
-        "noPrompts": "No hi ha indicacions disponibles",
-        "selectPrompt": "Seleccioneu una indicació",
-        "createNew": "Creeu una indicació nova",
-        "promptLabel": "Nom de la indicació",
-        "promptLabelPlaceholder": "Introduïu el nom de la indicació",
         "promptInstructions": "Instruccions de la indicació",
         "promptInstructionsPlaceholder": "Escriviu les instruccions que s'executaran després de la transcripció. Exemple: Millora la gramàtica i la claredat del text següol: ${output}",
         "promptTip": "Consell: utilitzeu <code>${output}</code> per inserir el text transcrit a la indicació.",
-        "updatePrompt": "Actualitzeu la indicació",
-        "deletePrompt": "Suprimiu la indicació",
-        "createPrompt": "Creeu la indicació",
-        "cancel": "Cancel·leu",
-        "selectToEdit": "Seleccioneu una indicació more amunt per veure'n i editar-ne els detalls.",
-        "createFirst": "Feu clic a «Creeu una indicació nova» més amunt per crear la primera indicació de postprocessament."
+        "description": "Què fa aquesta pestanya amb la teva transcripció. Fes servir ${output} on hagi d'anar la transcripció."
+      },
+      "profiles": {
+        "tabsLabel": "Pestanyes de postprocessament",
+        "add": "Afegeix postprocessament",
+        "newName": "Postprocessament {{number}}",
+        "empty": "Encara no hi ha pestanyes de postprocessament. Fes clic a + per afegir-ne una.",
+        "name": {
+          "title": "Nom",
+          "description": "Es mostra a la pestanya i als missatges de dreceres."
+        },
+        "shortcut": {
+          "title": "Drecera",
+          "description": "Enregistra la teva veu, la transcriu i aplica el postprocessament d'aquesta pestanya."
+        },
+        "delete": {
+          "button": "Elimina",
+          "title": "Vols eliminar «{{name}}»?",
+          "description": "S'eliminaran la pestanya, la seva configuració i la seva drecera. No es pot desfer.",
+          "confirm": "Elimina",
+          "cancel": "Cancel·la"
+        },
+        "errors": {
+          "add": "No s'ha pogut afegir el postprocessament: {{error}}",
+          "save": "No s'ha pogut desar: {{error}}",
+          "delete": "No s'ha pogut eliminar: {{error}}",
+          "fetchModels": "No s'han pogut carregar els models: {{error}}"
+        }
       }
     },
     "history": {

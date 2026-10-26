@@ -176,8 +176,10 @@
         "errors": {
           "restore": "Nie udało się przywrócić oryginalnego skrótu",
           "set": "Nie udało się ustawić skrótu: {{error}}",
-          "reset": "Nie udało się zresetować skrótu do wartości domyślnej"
-        }
+          "reset": "Nie udało się zresetować skrótu do wartości domyślnej",
+          "conflict": "{{shortcut}} jest już używany przez „{{name}}”. Wybierz inny skrót."
+        },
+        "notSet": "Nie ustawiono"
       },
       "language": {
         "title": "Język",
@@ -382,9 +384,6 @@
       }
     },
     "postProcessing": {
-      "hotkey": {
-        "title": "Skrót klawiszowy"
-      },
       "api": {
         "title": "API",
         "provider": {
@@ -424,24 +423,37 @@
       },
       "prompts": {
         "title": "Prompt",
-        "selectedPrompt": {
-          "title": "Wybrany prompt",
-          "description": "Wybierz szablon do ulepszania transkrypcji lub utwórz nowy. Użyj ${output} w treści, aby odwołać się do przechwyconej transkrypcji."
-        },
-        "noPrompts": "Brak dostępnych promptów",
-        "selectPrompt": "Wybierz prompt",
-        "createNew": "Utwórz nowy prompt",
-        "promptLabel": "Etykieta promptu",
-        "promptLabelPlaceholder": "Wpisz nazwę promptu",
         "promptInstructions": "Instrukcje promptu",
         "promptInstructionsPlaceholder": "Wpisz instrukcje do wykonania po transkrypcji. Przykład: Popraw gramatykę i jasność dla następującego tekstu: ${output}",
         "promptTip": "Wskazówka: użyj <code>${output}</code>, aby wstawić transkrybowany tekst do promptu.",
-        "updatePrompt": "Zaktualizuj prompt",
-        "deletePrompt": "Usuń prompt",
-        "createPrompt": "Utwórz prompt",
-        "cancel": "Anuluj",
-        "selectToEdit": "Wybierz prompt powyżej, aby zobaczyć i edytować jego szczegóły.",
-        "createFirst": "Kliknij 'Utwórz nowy prompt' powyżej, aby utworzyć pierwszy prompt postprocessingu."
+        "description": "Co ta karta robi z transkrypcją. Wpisz ${output} tam, gdzie ma się znaleźć transkrypcja."
+      },
+      "profiles": {
+        "tabsLabel": "Karty przetwarzania końcowego",
+        "add": "Dodaj przetwarzanie końcowe",
+        "newName": "Przetwarzanie {{number}}",
+        "empty": "Brak kart przetwarzania końcowego. Kliknij +, aby dodać.",
+        "name": {
+          "title": "Nazwa",
+          "description": "Wyświetlana na karcie i w komunikatach o skrótach."
+        },
+        "shortcut": {
+          "title": "Skrót",
+          "description": "Nagrywa głos, transkrybuje go i stosuje przetwarzanie końcowe tej karty."
+        },
+        "delete": {
+          "button": "Usuń",
+          "title": "Usunąć „{{name}}”?",
+          "description": "Karta, jej ustawienia i skrót zostaną usunięte. Tej operacji nie można cofnąć.",
+          "confirm": "Usuń",
+          "cancel": "Anuluj"
+        },
+        "errors": {
+          "add": "Nie udało się dodać przetwarzania końcowego: {{error}}",
+          "save": "Nie udało się zapisać: {{error}}",
+          "delete": "Nie udało się usunąć: {{error}}",
+          "fetchModels": "Nie udało się wczytać modeli: {{error}}"
+        }
       }
     },
     "history": {

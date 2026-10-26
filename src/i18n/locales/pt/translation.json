@@ -149,8 +149,10 @@
         "errors": {
           "restore": "Falha ao restaurar atalho original",
           "set": "Falha ao definir atalho: {{error}}",
-          "reset": "Falha ao redefinir atalho para o valor original"
-        }
+          "reset": "Falha ao redefinir atalho para o valor original",
+          "conflict": "{{shortcut}} já está em uso por “{{name}}”. Escolha outro atalho."
+        },
+        "notSet": "Não definido"
       },
       "language": {
         "title": "Idioma",
@@ -382,9 +384,6 @@
       }
     },
     "postProcessing": {
-      "hotkey": {
-        "title": "Tecla de atalho"
-      },
       "api": {
         "title": "API",
         "provider": {
@@ -424,24 +423,37 @@
       },
       "prompts": {
         "title": "Prompt",
-        "selectedPrompt": {
-          "title": "Prompt Selecionado",
-          "description": "Selecione um modelo para refinar transcrições ou crie um novo. Use ${output} dentro do texto do prompt para referenciar a transcrição capturada."
-        },
-        "noPrompts": "Nenhum prompt disponível",
-        "selectPrompt": "Selecionar um prompt",
-        "createNew": "Criar Novo Prompt",
-        "promptLabel": "Rótulo do Prompt",
-        "promptLabelPlaceholder": "Digite o nome do prompt",
         "promptInstructions": "Instruções do Prompt",
         "promptInstructionsPlaceholder": "Escreva as instruções para executar após a transcrição. Exemplo: Melhore a gramática e clareza do seguinte texto: ${output}",
         "promptTip": "Dica: Use <code>${output}</code> para inserir o texto transcrito no seu prompt.",
-        "updatePrompt": "Atualizar Prompt",
-        "deletePrompt": "Excluir Prompt",
-        "createPrompt": "Criar Prompt",
-        "cancel": "Cancelar",
-        "selectToEdit": "Selecione um prompt acima para visualizar e editar seus detalhes.",
-        "createFirst": "Clique em 'Criar Novo Prompt' acima para criar seu primeiro prompt de pós-processamento."
+        "description": "O que esta aba faz com a sua transcrição. Use ${output} onde a transcrição deve entrar."
+      },
+      "profiles": {
+        "tabsLabel": "Abas de pós-processamento",
+        "add": "Adicionar pós-processamento",
+        "newName": "Pós-processamento {{number}}",
+        "empty": "Ainda não há abas de pós-processamento. Clique em + para adicionar uma.",
+        "name": {
+          "title": "Nome",
+          "description": "Exibido na aba e nas mensagens de atalho."
+        },
+        "shortcut": {
+          "title": "Atalho",
+          "description": "Grava sua voz, transcreve e aplica o pós-processamento desta aba."
+        },
+        "delete": {
+          "button": "Excluir",
+          "title": "Excluir “{{name}}”?",
+          "description": "A aba, suas configurações e seu atalho serão removidos. Isso não pode ser desfeito.",
+          "confirm": "Excluir",
+          "cancel": "Cancelar"
+        },
+        "errors": {
+          "add": "Falha ao adicionar pós-processamento: {{error}}",
+          "save": "Falha ao salvar: {{error}}",
+          "delete": "Falha ao excluir: {{error}}",
+          "fetchModels": "Falha ao carregar modelos: {{error}}"
+        }
       }
     },
     "history": {

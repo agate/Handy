@@ -149,8 +149,10 @@
         "errors": {
           "restore": "Kunne ikke gendanne den oprindelige genvej",
           "set": "Kunne ikke indstille genvej: {{error}}",
-          "reset": "Kunne ikke nulstille genvej til oprindelig indstilling"
-        }
+          "reset": "Kunne ikke nulstille genvej til oprindelig indstilling",
+          "conflict": "{{shortcut}} bruges allerede af “{{name}}”. Vælg en anden genvej."
+        },
+        "notSet": "Ikke angivet"
       },
       "language": {
         "title": "Sprog",
@@ -382,9 +384,6 @@
       }
     },
     "postProcessing": {
-      "hotkey": {
-        "title": "Genvejstast"
-      },
       "api": {
         "title": "API",
         "provider": {
@@ -424,24 +423,37 @@
       },
       "prompts": {
         "title": "Prompt",
-        "selectedPrompt": {
-          "title": "Valgt prompt",
-          "description": "Vælg en skabelon til at forfine transskriptioner, eller opret en ny. Brug ${output} i promptteksten for at referere til den fangede transskription."
-        },
-        "noPrompts": "Ingen prompts tilgængelige",
-        "selectPrompt": "Vælg en prompt",
-        "createNew": "Opret ny prompt",
-        "promptLabel": "Promptnavn",
-        "promptLabelPlaceholder": "Indtast promptnavn",
         "promptInstructions": "Promptinstruktioner",
         "promptInstructionsPlaceholder": "Skriv de instruktioner, der skal køres efter transskription. Eksempel: Forbedr grammatik og klarhed for følgende tekst: ${output}",
         "promptTip": "Tip: Brug <code>${output}</code> til at indsætte den transskriberede tekst i din prompt.",
-        "updatePrompt": "Opdater prompt",
-        "deletePrompt": "Slet prompt",
-        "createPrompt": "Opret prompt",
-        "cancel": "Annuller",
-        "selectToEdit": "Vælg en prompt ovenfor for at se og redigere dens detaljer.",
-        "createFirst": "Klik på 'Opret ny prompt' ovenfor for at oprette din første efterbehandlingsprompt."
+        "description": "Hvad denne fane gør med din transskription. Skriv ${output}, hvor transskriptionen skal stå."
+      },
+      "profiles": {
+        "tabsLabel": "Efterbehandlingsfaner",
+        "add": "Tilføj efterbehandling",
+        "newName": "Efterbehandling {{number}}",
+        "empty": "Ingen efterbehandlingsfaner endnu. Klik på + for at tilføje en.",
+        "name": {
+          "title": "Navn",
+          "description": "Vises på fanen og i beskeder om genveje."
+        },
+        "shortcut": {
+          "title": "Genvej",
+          "description": "Optager din stemme, transskriberer den og anvender denne fanes efterbehandling."
+        },
+        "delete": {
+          "button": "Slet",
+          "title": "Slet “{{name}}”?",
+          "description": "Fanen, dens indstillinger og dens genvej fjernes. Det kan ikke fortrydes.",
+          "confirm": "Slet",
+          "cancel": "Annuller"
+        },
+        "errors": {
+          "add": "Kunne ikke tilføje efterbehandling: {{error}}",
+          "save": "Kunne ikke gemme: {{error}}",
+          "delete": "Kunne ikke slette: {{error}}",
+          "fetchModels": "Kunne ikke indlæse modeller: {{error}}"
+        }
       }
     },
     "history": {

@@ -149,8 +149,10 @@
         "errors": {
           "restore": "無法還原原始快捷鍵",
           "set": "無法設定快捷鍵: {{error}}",
-          "reset": "無法將快捷鍵重設為原始值"
-        }
+          "reset": "無法將快捷鍵重設為原始值",
+          "conflict": "{{shortcut}} 已被「{{name}}」使用，請換一個快速鍵。"
+        },
+        "notSet": "未設定"
       },
       "language": {
         "title": "語言",
@@ -382,9 +384,6 @@
       }
     },
     "postProcessing": {
-      "hotkey": {
-        "title": "快捷鍵"
-      },
       "api": {
         "title": "API",
         "provider": {
@@ -424,24 +423,37 @@
       },
       "prompts": {
         "title": "提示詞",
-        "selectedPrompt": {
-          "title": "已選提示詞",
-          "description": "選擇用於最佳化轉錄的範本或建立新範本。在提示詞文字中使用 ${output} 來引用轉錄結果"
-        },
-        "noPrompts": "沒有可用的提示詞",
-        "selectPrompt": "選擇提示詞",
-        "createNew": "建立新提示詞",
-        "promptLabel": "提示詞名稱",
-        "promptLabelPlaceholder": "輸入提示詞名稱",
         "promptInstructions": "提示詞指令",
         "promptInstructionsPlaceholder": "撰寫轉錄後要執行的指令。範例：改善以下文字的語法和清晰度: ${output}",
         "promptTip": "提示：使用 <code>${output}</code> 將轉錄文字插入到您的提示詞中",
-        "updatePrompt": "更新提示詞",
-        "deletePrompt": "刪除提示詞",
-        "createPrompt": "建立提示詞",
-        "cancel": "取消",
-        "selectToEdit": "選擇上方的提示詞以檢視和編輯其詳細資訊",
-        "createFirst": "點選上方的「建立新提示詞」來建立您的第一個後處理提示詞"
+        "description": "這個分頁如何處理你的轉錄文字。在提示詞中用 ${output} 表示轉錄內容的位置。"
+      },
+      "profiles": {
+        "tabsLabel": "後處理分頁",
+        "add": "新增後處理",
+        "newName": "後處理 {{number}}",
+        "empty": "還沒有後處理分頁。點擊 + 新增一個。",
+        "name": {
+          "title": "名稱",
+          "description": "顯示在分頁和快速鍵提示中。"
+        },
+        "shortcut": {
+          "title": "快速鍵",
+          "description": "錄音、轉錄，然後執行這個分頁的後處理。"
+        },
+        "delete": {
+          "button": "刪除",
+          "title": "刪除「{{name}}」？",
+          "description": "這會刪除該分頁、它的設定和快速鍵，且無法復原。",
+          "confirm": "刪除",
+          "cancel": "取消"
+        },
+        "errors": {
+          "add": "新增後處理失敗：{{error}}",
+          "save": "儲存失敗：{{error}}",
+          "delete": "刪除失敗：{{error}}",
+          "fetchModels": "載入模型失敗：{{error}}"
+        }
       }
     },
     "history": {

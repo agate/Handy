@@ -8,6 +8,9 @@ interface ShortcutInputProps {
   grouped?: boolean;
   shortcutId: string;
   disabled?: boolean;
+  /** Overrides the binding's translated name, e.g. inside a profile tab. */
+  title?: string;
+  description?: string;
 }
 
 /**

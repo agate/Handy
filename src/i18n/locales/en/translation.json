@@ -149,8 +149,10 @@
         "errors": {
           "restore": "Failed to restore original shortcut",
           "set": "Failed to set shortcut: {{error}}",
-          "reset": "Failed to reset shortcut to original value"
-        }
+          "reset": "Failed to reset shortcut to original value",
+          "conflict": "{{shortcut}} is already used by “{{name}}”. Pick a different shortcut."
+        },
+        "notSet": "Not set"
       },
       "language": {
         "title": "Language",
@@ -382,9 +384,6 @@
       }
     },
     "postProcessing": {
-      "hotkey": {
-        "title": "Hotkey"
-      },
       "api": {
         "title": "API",
         "provider": {
@@ -424,24 +423,37 @@
       },
       "prompts": {
         "title": "Prompt",
-        "selectedPrompt": {
-          "title": "Selected Prompt",
-          "description": "Select a template for refining transcriptions or create a new one. Use ${output} inside the prompt text to reference the captured transcript."
-        },
-        "noPrompts": "No prompts available",
-        "selectPrompt": "Select a prompt",
-        "createNew": "Create New Prompt",
-        "promptLabel": "Prompt Label",
-        "promptLabelPlaceholder": "Enter prompt name",
         "promptInstructions": "Prompt Instructions",
         "promptInstructionsPlaceholder": "Write the instructions to run after transcription. Example: Improve grammar and clarity for the following text: ${output}",
         "promptTip": "Tip: Use <code>${output}</code> to insert the transcribed text in your prompt.",
-        "updatePrompt": "Update Prompt",
-        "deletePrompt": "Delete Prompt",
-        "createPrompt": "Create Prompt",
-        "cancel": "Cancel",
-        "selectToEdit": "Select a prompt above to view and edit its details.",
-        "createFirst": "Click 'Create New Prompt' above to create your first post-processing prompt."
+        "description": "What this tab does with your transcript. Use ${output} where the transcript should go."
+      },
+      "profiles": {
+        "tabsLabel": "Post-processing tabs",
+        "add": "Add post-processing",
+        "newName": "Post Process {{number}}",
+        "empty": "No post-processing tabs yet. Click + to add one.",
+        "name": {
+          "title": "Name",
+          "description": "Shown on the tab and in shortcut messages."
+        },
+        "shortcut": {
+          "title": "Shortcut",
+          "description": "Records your voice, transcribes it, and applies this tab's post-processing."
+        },
+        "delete": {
+          "button": "Delete",
+          "title": "Delete “{{name}}”?",
+          "description": "This removes the tab, its settings, and its shortcut. This cannot be undone.",
+          "confirm": "Delete",
+          "cancel": "Cancel"
+        },
+        "errors": {
+          "add": "Failed to add post-processing: {{error}}",
+          "save": "Failed to save: {{error}}",
+          "delete": "Failed to delete: {{error}}",
+          "fetchModels": "Failed to load models: {{error}}"
+        }
       }
     },
     "history": {

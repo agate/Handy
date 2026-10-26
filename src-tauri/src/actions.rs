@@ -8,7 +8,10 @@ use crate::managers::model::ModelManager;
 use crate::managers::transcription::policy::{live_decode, LiveDecode, ModelTraits};
 use crate::managers::transcription::StreamWorkKind;
 use crate::managers::transcription::TranscriptionManager;
-use crate::settings::{get_settings, AppSettings, OverlayStyle, APPLE_INTELLIGENCE_PROVIDER_ID};
+use crate::settings::{
+    get_settings, is_post_process_binding_id, AppSettings, OverlayStyle, PostProcessProfile,
+    APPLE_INTELLIGENCE_PROVIDER_ID,
+};
 use crate::shortcut;
 use crate::tray::{set_tray_state, TrayIconState};
 use crate::utils::{
@@ -125,72 +128,53 @@ fn should_use_streaming_overlay(style: OverlayStyle, is_streaming: bool) -> bool
     style == OverlayStyle::Live && is_streaming
 }
 
-async fn post_process_transcription(settings: &AppSettings, transcription: &str) -> Option<String> {
+async fn post_process_transcription(
+    settings: &AppSettings,
+    profile: &PostProcessProfile,
+    transcription: &str,
+) -> Option<String> {
     if is_blank_transcription(transcription) {
         debug!("Post-processing skipped because the transcription is empty");
         return None;
     }
 
-    let provider = match settings.active_post_process_provider().cloned() {
+    let provider = match settings.post_process_provider_for_profile(profile) {
         Some(provider) => provider,
         None => {
-            debug!("Post-processing enabled but no provider is selected");
-            return None;
-        }
-    };
-
-    let model = settings
-        .post_process_models
-        .get(&provider.id)
-        .cloned()
-        .unwrap_or_default();
-
-    if model.trim().is_empty() {
-        debug!(
-            "Post-processing skipped because provider '{}' has no model configured",
-            provider.id
-        );
-        return None;
-    }
-
-    let selected_prompt_id = match &settings.post_process_selected_prompt_id {
-        Some(id) => id.clone(),
-        None => {
-            debug!("Post-processing skipped because no prompt is selected");
-            return None;
-        }
-    };
-
-    let prompt = match settings
-        .post_process_prompts
-        .iter()
-        .find(|prompt| prompt.id == selected_prompt_id)
-    {
-        Some(prompt) => prompt.prompt.clone(),
-        None => {
             debug!(
-                "Post-processing skipped because prompt '{}' was not found",
-                selected_prompt_id
+                "Post-processing skipped because profile '{}' uses unknown provider '{}'",
+                profile.id, profile.provider_id
             );
             return None;
         }
     };
 
+    let model = profile.model.clone();
+
+    if model.trim().is_empty() {
+        debug!(
+            "Post-processing skipped because profile '{}' has no model configured",
+            profile.id
+        );
+        return None;
+    }
+
+    let prompt = profile.prompt.clone();
+
     if prompt.trim().is_empty() {
-        debug!("Post-processing skipped because the selected prompt is empty");
+        debug!(
+            "Post-processing skipped because profile '{}' has an empty prompt",
+            profile.id
+        );
         return None;
     }
 
     debug!(
-        "Starting LLM post-processing with provider '{}' (model: {})",
-        provider.id, model
+        "Starting LLM post-processing for profile '{}' with provider '{}' (model: {})",
+        profile.id, provider.id, model
     );
 
-    let api_key = settings
-        .post_process_api_keys
-        .get(&provider.id)
-        .cloned()
-        .unwrap_or_default();
+    let api_key = profile.api_key.clone();
 
     // Ask these providers to skip reasoning/thinking — post-processing rarely
     // benefits from it and it adds seconds of latency. llm_client picks the
@@ -357,30 +341,36 @@ pub(crate) struct ProcessedTranscription {
     pub post_process_prompt: Option<String>,
 }
 
+/// Applies the post-processing profile `profile_id` (when given and it still
+/// exists) to a transcription.
 pub(crate) async fn process_transcription_output(
     app: &AppHandle,
     transcription: &str,
-    post_process: bool,
+    profile_id: Option<&str>,
 ) -> ProcessedTranscription {
     let settings = get_settings(app);
     let mut final_text = transcription.to_string();
     let mut post_processed_text: Option<String> = None;
     let mut post_process_prompt: Option<String> = None;
 
-    if post_process {
-        if let Some(processed_text) = post_process_transcription(&settings, &final_text).await {
+    let profile = profile_id.and_then(|id| {
+        let profile = settings.post_process_profile(id);
+        if profile.is_none() {
+            debug!(
+                "Post-processing skipped because profile '{}' no longer exists",
+                id
+            );
+        }
+        profile
+    });
+
+    if let Some(profile) = profile {
+        if let Some(processed_text) =
+            post_process_transcription(&settings, profile, &final_text).await
+        {
             post_processed_text = Some(processed_text.clone());
             final_text = processed_text;
-
-            if let Some(prompt_id) = &settings.post_process_selected_prompt_id {
-                if let Some(prompt) = settings
-                    .post_process_prompts
-                    .iter()
-                    .find(|prompt| &prompt.id == prompt_id)
-                {
-                    post_process_prompt = Some(prompt.prompt.clone());
-                }
-            }
+            post_process_prompt = Some(profile.prompt.clone());
         }
     }
 
@@ -609,6 +599,8 @@ impl ShortcutAction for TranscribeAction {
 
         let binding_id = binding_id.to_string(); // Clone binding_id for the async task
         let post_process = self.post_process;
+        // A post-processing binding's id is the id of the profile it runs.
+        let profile_id = post_process.then(|| binding_id.clone());
         let cancel_generation = rm.cancel_generation();
 
         tauri::async_runtime::spawn(async move {
@@ -706,7 +698,11 @@ impl ShortcutAction for TranscribeAction {
                                 }
                             }
                             let Some(processed) = complete_unless_cancelled(
-                                process_transcription_output(&ah, &transcription, post_process),
+                                process_transcription_output(
+                                    &ah,
+                                    &transcription,
+                                    profile_id.as_deref(),
+                                ),
                                 || rm.was_cancelled_since(cancel_generation),
                             )
                             .await
@@ -729,7 +725,7 @@ impl ShortcutAction for TranscribeAction {
                                 if let Err(err) = hm.save_entry(
                                     file_name,
                                     transcription,
-                                    post_process,
+                                    profile_id.clone(),
                                     processed.post_processed_text.clone(),
                                     processed.post_process_prompt.clone(),
                                 ) {
@@ -807,7 +803,7 @@ impl ShortcutAction for TranscribeAction {
                                 if let Err(save_err) = hm.save_entry(
                                     file_name,
                                     String::new(),
-                                    post_process,
+                                    profile_id.clone(),
                                     None,
                                     None,
                                 ) {
@@ -881,10 +877,6 @@ pub static ACTION_MAP: Lazy<HashMap<String, Arc<dyn ShortcutAction>>> = Lazy::ne
         }) as Arc<dyn ShortcutAction>,
     );
     map.insert(
-        "transcribe_with_post_process".to_string(),
-        Arc::new(TranscribeAction { post_process: true }) as Arc<dyn ShortcutAction>,
-    );
-    map.insert(
         "cancel".to_string(),
         Arc::new(CancelAction) as Arc<dyn ShortcutAction>,
     );
@@ -894,6 +886,20 @@ pub static ACTION_MAP: Lazy<HashMap<String, Arc<dyn ShortcutAction>>> = Lazy::ne
     );
     map
 });
+
+/// Every post-processing profile shares one action; the binding id passed to
+/// it selects the profile.
+static POST_PROCESS_ACTION: Lazy<Arc<dyn ShortcutAction>> =
+    Lazy::new(|| Arc::new(TranscribeAction { post_process: true }));
+
+/// The action behind a binding: a fixed one from `ACTION_MAP`, or the
+/// post-processing action for any profile's binding.
+pub fn action_for_binding(binding_id: &str) -> Option<Arc<dyn ShortcutAction>> {
+    if is_post_process_binding_id(binding_id) {
+        return Some(Arc::clone(&POST_PROCESS_ACTION));
+    }
+    ACTION_MAP.get(binding_id).cloned()
+}
 
 #[cfg(test)]
 mod tests {

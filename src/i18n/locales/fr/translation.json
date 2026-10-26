@@ -176,8 +176,10 @@
         "errors": {
           "restore": "Échec de la restauration du raccourci original",
           "set": "Échec de la définition du raccourci : {{error}}",
-          "reset": "Échec de la réinitialisation du raccourci à sa valeur d'origine"
-        }
+          "reset": "Échec de la réinitialisation du raccourci à sa valeur d'origine",
+          "conflict": "{{shortcut}} est déjà utilisé par « {{name}} ». Choisissez un autre raccourci."
+        },
+        "notSet": "Non défini"
       },
       "language": {
         "title": "Langue",
@@ -382,9 +384,6 @@
       }
     },
     "postProcessing": {
-      "hotkey": {
-        "title": "Raccourci clavier"
-      },
       "api": {
         "title": "API",
         "provider": {
@@ -424,24 +423,37 @@
       },
       "prompts": {
         "title": "Prompt",
-        "selectedPrompt": {
-          "title": "Prompt sélectionné",
-          "description": "Sélectionnez un modèle pour affiner les transcriptions ou créez-en un nouveau. Utilisez ${output} dans le texte du prompt pour référencer la transcription capturée."
-        },
-        "noPrompts": "Aucun prompt disponible",
-        "selectPrompt": "Sélectionner un prompt",
-        "createNew": "Créer un nouveau prompt",
-        "promptLabel": "Libellé du prompt",
-        "promptLabelPlaceholder": "Entrez le nom du prompt",
         "promptInstructions": "Instructions du prompt",
         "promptInstructionsPlaceholder": "Écrivez les instructions à exécuter après la transcription. Exemple : Améliorer la grammaire et la clarté du texte suivant : ${output}",
         "promptTip": "Astuce : Utilisez <code>${output}</code> pour insérer le texte transcrit dans votre prompt.",
-        "updatePrompt": "Mettre à jour le prompt",
-        "deletePrompt": "Supprimer le prompt",
-        "createPrompt": "Créer le prompt",
-        "cancel": "Annuler",
-        "selectToEdit": "Sélectionnez un prompt ci-dessus pour voir et modifier ses détails.",
-        "createFirst": "Cliquez sur 'Créer un nouveau prompt' ci-dessus pour créer votre premier prompt de post-traitement."
+        "description": "Ce que cet onglet fait de votre transcription. Utilisez ${output} à l'endroit où la transcription doit apparaître."
+      },
+      "profiles": {
+        "tabsLabel": "Onglets de post-traitement",
+        "add": "Ajouter un post-traitement",
+        "newName": "Post-traitement {{number}}",
+        "empty": "Aucun onglet de post-traitement pour l'instant. Cliquez sur + pour en ajouter un.",
+        "name": {
+          "title": "Nom",
+          "description": "Affiché sur l'onglet et dans les messages de raccourci."
+        },
+        "shortcut": {
+          "title": "Raccourci",
+          "description": "Enregistre votre voix, la transcrit et applique le post-traitement de cet onglet."
+        },
+        "delete": {
+          "button": "Supprimer",
+          "title": "Supprimer « {{name}} » ?",
+          "description": "L'onglet, ses réglages et son raccourci seront supprimés. Cette action est irréversible.",
+          "confirm": "Supprimer",
+          "cancel": "Annuler"
+        },
+        "errors": {
+          "add": "Impossible d'ajouter le post-traitement : {{error}}",
+          "save": "Échec de l'enregistrement : {{error}}",
+          "delete": "Échec de la suppression : {{error}}",
+          "fetchModels": "Impossible de charger les modèles : {{error}}"
+        }
       }
     },
     "history": {
